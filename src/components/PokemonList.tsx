@@ -48,7 +48,7 @@ export default function PokemonList({ type = "" }: iPokemonList) {
   }, [fetchPokemon]);
 
   return (
-    <div style={{maxHeight:'80vh'}} className="grid pt-24  grid-cols-4 gap-6 gap-y-32 overflow-auto">
+    <div style={{maxHeight:'80vh'}} id='scrollbarCustom' className="grid pt-24  grid-cols-4 gap-6 gap-y-32 overflow-auto">
       {pokemons?.map((e: any, index: number) => (
         <React.Fragment key={index}>
           {e?.sprites?.front_default && (
