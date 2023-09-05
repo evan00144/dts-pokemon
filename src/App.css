@@ -1,0 +1,14 @@
+@font-face {
+    font-family: vcr;
+    src: url('./assets/vcr.ttf');
+}
+
+*{
+    font-family:vcr,sans-serif !important;
+}
+.fieldbg{
+    position:relative;
+    max-height:100vh;
+    min-height:100vh;
+
+}
