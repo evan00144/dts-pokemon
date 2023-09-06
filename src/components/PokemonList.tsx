@@ -8,13 +8,17 @@ interface iPokemonList {
 export default function PokemonList({ type = "" }: iPokemonList) {
   const [pokemons, setPokemons] = useState<any>([]);
   const [favorite, setFavorite] = useState<any>([]);
+  const [offset, setOffset] = useState<any>(0);
+  const [isLoading, setIsLoading] = useState(false);
+
   const fetchPokemon = useCallback(async () => {
     try {
       const res = await fetch(
         `https://pokeapi.co/api/v2/${
-          type === "" ? "pokemon" : `type/${type}/?limit=20`
+          type === "" ? `pokemon?limit=20&offset=${offset}` : `type/${type}/`
         }`
       );
+
       const data = await res.json();
       const pokemonPromises =
         type === ""
@@ -26,11 +30,13 @@ export default function PokemonList({ type = "" }: iPokemonList) {
             });
 
       const pokemonData = await Promise.all(pokemonPromises);
-      setPokemons(pokemonData);
+      const tempArr = pokemons;
+
+      setPokemons(tempArr.concat(pokemonData));
     } catch (e) {
       console.log(e);
     }
-  }, [type]);
+  }, [type, offset]);
 
   const fetchPokemonDetail = async (url: string) => {
     let data;
@@ -65,12 +71,36 @@ export default function PokemonList({ type = "" }: iPokemonList) {
         );
       } else {
         arr.push(fav);
-        setFavorite(arr); 
+        setFavorite(arr);
         localStorage.setItem("favorite", JSON.stringify(arr));
       }
     }
   };
+  const handleScroll = useCallback(() => {
+    const divElement = document.getElementById("scrollbarCustom"); // Replace 'myDiv' with the ID of your <div> element
+    if (
+      divElement &&
+      divElement.clientHeight + divElement.scrollTop !== divElement.scrollHeight
+    ) {
+      return;
+    }
 
+    setOffset((prev: number) => prev + 20);
+  }, []);
+
+  useEffect(() => {
+    const divElement = document.getElementById("scrollbarCustom"); // Replace 'myDiv' with the ID of your <div> element
+
+    if (divElement) {
+      divElement.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      if (divElement) {
+        divElement.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [handleScroll, isLoading]);
   return (
     <div
       style={{ flex: "1" }}

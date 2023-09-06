@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import StarIcon from "../icons/StarIcon";
+import { Link } from "react-router-dom";
 
 export default function FavoritePage() {
   const [favorite, setFavorite] = useState(
@@ -36,7 +37,15 @@ export default function FavoritePage() {
       }}
     >
       <div className="container px-12 py-5 mx-auto h-screen flex-col flex">
-        <h1 className="text-4xl mb-4 font-bold">Pokédex</h1>
+        <div className="flex  items-center">
+          <h1 className="text-4xl  mb-2 font-bold me-auto">Pokédex</h1>
+          <Link className="me-12 text-lg" to={"/"}>
+            Home
+          </Link>
+          <Link className="text-lg" to={"/favorite"}>
+            Favorite
+          </Link>
+        </div>{" "}
         <h1 className="text-xl mb-4">Favorite Pokemon</h1>
         <div className="h-full shadow-lg w-full bg-white rounded-[36px] overflow-auto p-6">
           <div className="grid grid-cols-6">
@@ -45,7 +54,10 @@ export default function FavoritePage() {
                 <img src={e?.sprites?.front_default} alt="" width={250} />
                 <div className="flex items-center justify-center gap-2">
                   <h6 className="capitalize">{e?.name}</h6>
-                  <div className="cursor-pointer" onClick={()=>addToFavorite(e)}>
+                  <div
+                    className="cursor-pointer"
+                    onClick={() => addToFavorite(e)}
+                  >
                     <StarIcon checked={true} />
                   </div>
                 </div>
