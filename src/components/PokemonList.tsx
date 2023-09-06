@@ -9,7 +9,6 @@ export default function PokemonList({ type = "" }: iPokemonList) {
   const [pokemons, setPokemons] = useState<any>([]);
   const [favorite, setFavorite] = useState<any>([]);
   const [offset, setOffset] = useState<any>(0);
-  const [isLoading, setIsLoading] = useState(false);
 
   const fetchPokemon = useCallback(async () => {
     try {
@@ -107,7 +106,7 @@ export default function PokemonList({ type = "" }: iPokemonList) {
         divElement.removeEventListener("scroll", handleScroll);
       }
     };
-  }, [handleScroll, isLoading]);
+  }, [handleScroll]);
   return (
     <div
       style={{ flex: "1" }}
