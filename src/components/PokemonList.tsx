@@ -77,19 +77,26 @@ export default function PokemonList({ type = "" }: iPokemonList) {
     }
   };
   const handleScroll = useCallback(() => {
-    const divElement = document.getElementById("scrollbarCustom"); // Replace 'myDiv' with the ID of your <div> element
+    const divElement = document.getElementById(
+      "scrollbarCustom"
+    ) as HTMLElement;
     if (
-      divElement &&
-      divElement.clientHeight + divElement.scrollTop !== divElement.scrollHeight
+      Math.ceil(divElement.clientHeight + divElement.scrollTop) !==
+        divElement.scrollHeight 
+      // Math.floor(divElement.clientHeight + divElement.scrollTop) !==
+      //   divElement.scrollHeight
     ) {
+      console.log(
+        divElement.clientHeight + divElement.scrollTop,
+        divElement.scrollHeight
+      );
       return;
     }
-
     setOffset((prev: number) => prev + 20);
   }, []);
 
   useEffect(() => {
-    const divElement = document.getElementById("scrollbarCustom"); // Replace 'myDiv' with the ID of your <div> element
+    const divElement = document.getElementById("scrollbarCustom");
 
     if (divElement) {
       divElement.addEventListener("scroll", handleScroll);
