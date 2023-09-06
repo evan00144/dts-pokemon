@@ -72,7 +72,7 @@ export default function FilterPokemon({ setFilterType,filterType }: iFilterPokem
                   )}
                 </Menu.Item>
                 {types?.map((e: any, index: number) => (
-                  <Menu.Item>
+                  <Menu.Item key={index}>
                     {({ active }) => (
                       <div
                         onClick={() => handleSelectFilter(e?.name)}

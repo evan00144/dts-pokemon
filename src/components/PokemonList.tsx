@@ -7,6 +7,7 @@ interface iPokemonList {
 
 export default function PokemonList({ type = "" }: iPokemonList) {
   const [pokemons, setPokemons] = useState<any>([]);
+  const [favorite, setFavorite] = useState<any>([]);
   const fetchPokemon = useCallback(async () => {
     try {
       const res = await fetch(
@@ -25,7 +26,6 @@ export default function PokemonList({ type = "" }: iPokemonList) {
             });
 
       const pokemonData = await Promise.all(pokemonPromises);
-      console.log(pokemonData);
       setPokemons(pokemonData);
     } catch (e) {
       console.log(e);
@@ -47,8 +47,36 @@ export default function PokemonList({ type = "" }: iPokemonList) {
     fetchPokemon();
   }, [fetchPokemon]);
 
+  const addToFavorite = (fav: any, event: any) => {
+    event.stopPropagation();
+    const favorite = localStorage.getItem("favorite");
+    if (!favorite) {
+      const parse = JSON.stringify([fav]);
+      setFavorite([fav]);
+      localStorage.setItem("favorite", parse);
+    } else {
+      let arr: any[] = JSON.parse(favorite);
+      const isFavorited = arr?.find((e: any) => e?.id === fav?.id);
+      if (isFavorited) {
+        setFavorite(arr?.filter((e: any) => e?.id !== fav?.id));
+        localStorage.setItem(
+          "favorite",
+          JSON.stringify(arr?.filter((e: any) => e?.id !== fav?.id))
+        );
+      } else {
+        arr.push(fav);
+        setFavorite(arr); 
+        localStorage.setItem("favorite", JSON.stringify(arr));
+      }
+    }
+  };
+
   return (
-    <div style={{flex:'1'}} id='scrollbarCustom' className="grid pt-24  grid-cols-4 gap-6 gap-y-32 overflow-auto">
+    <div
+      style={{ flex: "1" }}
+      id="scrollbarCustom"
+      className="grid pt-24  grid-cols-4 gap-6 gap-y-32 overflow-auto"
+    >
       {pokemons?.map((e: any, index: number) => (
         <React.Fragment key={index}>
           {e?.sprites?.front_default && (
@@ -57,6 +85,8 @@ export default function PokemonList({ type = "" }: iPokemonList) {
               number={e?.id}
               name={e?.name}
               type={e?.types}
+              favorite={favorite.includes(e?.id)}
+              addToFavorite={(event: any) => addToFavorite(e, event)}
             />
           )}
         </React.Fragment>
